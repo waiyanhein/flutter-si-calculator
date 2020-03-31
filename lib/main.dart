@@ -6,12 +6,14 @@ class SICalculatorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-            accentColor: Colors.pinkAccent,
-            primaryColor: Colors.pink,
-            brightness: Brightness.dark),
-        title: "Simple Interest Calculator",
-        home: SIForm());
+      theme: ThemeData(
+          accentColor: Colors.pinkAccent,
+          primaryColor: Colors.pink,
+          brightness: Brightness.dark),
+      title: "Simple Interest Calculator",
+      home: SIForm(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
 
@@ -30,6 +32,7 @@ class _SIFormState extends State<SIForm> {
   TextEditingController principalController = TextEditingController();
   TextEditingController roiController = TextEditingController();
   TextEditingController termController = TextEditingController();
+  var _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,8 @@ class _SIFormState extends State<SIForm> {
         appBar: AppBar(
           title: Text("SI Calculator"),
         ),
-        body: Container(
+        body: Form(
+          key: _formKey,
           child: Column(
             children: <Widget>[
               Padding(
@@ -49,7 +53,20 @@ class _SIFormState extends State<SIForm> {
               Container(
                 child: Padding(
                   padding: EdgeInsets.all(this._minimumPadding),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return "Principal is required.";
+                      }
+
+                      try {
+                        double.parse(value);
+                      } catch (e) {
+                        return "Principal must be a number.";
+                      }
+
+                      return "";
+                    },
                     keyboardType: TextInputType.number,
                     style: textStyle,
                     controller: principalController,
@@ -64,7 +81,20 @@ class _SIFormState extends State<SIForm> {
               Container(
                 child: Padding(
                   padding: EdgeInsets.all(this._minimumPadding),
-                  child: TextField(
+                  child: TextFormField(
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return "Rate of interest is required.";
+                      }
+
+                      try {
+                        double.parse(value);
+                      } catch (e) {
+                        return "Rate of interest be a number.";
+                      }
+
+                      return "";
+                    },
                     keyboardType: TextInputType.number,
                     style: textStyle,
                     controller: roiController,
@@ -81,7 +111,20 @@ class _SIFormState extends State<SIForm> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(_minimumPadding),
-                      child: TextField(
+                      child: TextFormField(
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return "Term is required.";
+                          }
+
+                          try {
+                            double.parse(value);
+                          } catch (e) {
+                            return "Term must be a number.";
+                          }
+
+                          return "";
+                        },
                         keyboardType: TextInputType.number,
                         style: textStyle,
                         controller: termController,
@@ -129,7 +172,9 @@ class _SIFormState extends State<SIForm> {
                         ),
                         elevation: 6.0,
                         onPressed: () {
-                          this._calculateTotalReturns();
+                          if (this._formKey.currentState.validate()) {
+                            this._calculateTotalReturns();
+                          }
                         },
                       ),
                     ),
