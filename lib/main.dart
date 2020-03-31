@@ -5,7 +5,14 @@ void main() => runApp(SICalculatorApp());
 class SICalculatorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: "Simple Interest Calculator", home: SIForm());
+    return MaterialApp(
+      theme: ThemeData(
+        accentColor: Colors.pinkAccent,
+        primaryColor: Colors.pink,
+        brightness: Brightness.dark
+      ),
+        title: "Simple Interest Calculator",
+        home: SIForm());
   }
 }
 
@@ -23,6 +30,8 @@ class _SIFormState extends State<SIForm> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = Theme.of(context).textTheme.title;
+
     return Scaffold(
         appBar: AppBar(
           title: Text("SI Calculator"),
@@ -39,6 +48,7 @@ class _SIFormState extends State<SIForm> {
                   padding: EdgeInsets.all(this._minimumPadding),
                   child: TextField(
                     keyboardType: TextInputType.number,
+                    style: textStyle,
                     decoration: InputDecoration(
                         labelText: "Principal",
                         hintText: "Enter the principal",
@@ -52,6 +62,7 @@ class _SIFormState extends State<SIForm> {
                   padding: EdgeInsets.all(this._minimumPadding),
                   child: TextField(
                     keyboardType: TextInputType.number,
+                    style: textStyle,
                     decoration: InputDecoration(
                         labelText: "Rate of interest",
                         hintText: "Enter the rate of interest",
@@ -67,8 +78,9 @@ class _SIFormState extends State<SIForm> {
                       padding: EdgeInsets.all(_minimumPadding),
                       child: TextField(
                         keyboardType: TextInputType.number,
+                        style: textStyle,
                         decoration: InputDecoration(
-                            labelText: "Tern",
+                            labelText: "Term",
                             hintText: "Enter the term",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0))),
@@ -100,29 +112,27 @@ class _SIFormState extends State<SIForm> {
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(left: _minimumPadding, top: _minimumPadding),
+                      padding: EdgeInsets.only(
+                          left: _minimumPadding, top: _minimumPadding),
                       child: RaisedButton(
-                        textColor: Colors.white,
-                        color: Colors.pinkAccent,
-                        child: Text("Calculate"),
+                        textColor: Theme.of(context).accentColor,
+                        color: Theme.of(context).primaryColorDark,
+                        child: Text("Calculate", textScaleFactor: 1.5,),
                         elevation: 6.0,
-                        onPressed: () {
-
-                        },
+                        onPressed: () {},
                       ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(right: _minimumPadding, top: _minimumPadding),
+                      padding: EdgeInsets.only(
+                          right: _minimumPadding, top: _minimumPadding),
                       child: RaisedButton(
-                        textColor: Colors.white,
-                        color: Colors.amberAccent,
-                        child: Text("Reset"),
+                        textColor: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColorLight,
+                        child: Text("Reset", textScaleFactor: 1.5,),
                         elevation: 6.0,
-                        onPressed: () {
-
-                        },
+                        onPressed: () {},
                       ),
                     ),
                   )
