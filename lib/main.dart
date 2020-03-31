@@ -6,11 +6,10 @@ class SICalculatorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        accentColor: Colors.pinkAccent,
-        primaryColor: Colors.pink,
-        brightness: Brightness.dark
-      ),
+        theme: ThemeData(
+            accentColor: Colors.pinkAccent,
+            primaryColor: Colors.pink,
+            brightness: Brightness.dark),
         title: "Simple Interest Calculator",
         home: SIForm());
   }
@@ -27,6 +26,10 @@ class _SIFormState extends State<SIForm> {
   double _minimumPadding = 15.0;
   var _currencies = ["GBP", "EUP", "USD", "AUD", "SGD"];
   String _selectedCurrency = "GBP";
+  String _resultMessage = "";
+  TextEditingController principalController = TextEditingController();
+  TextEditingController roiController = TextEditingController();
+  TextEditingController termController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +52,7 @@ class _SIFormState extends State<SIForm> {
                   child: TextField(
                     keyboardType: TextInputType.number,
                     style: textStyle,
+                    controller: principalController,
                     decoration: InputDecoration(
                         labelText: "Principal",
                         hintText: "Enter the principal",
@@ -63,6 +67,7 @@ class _SIFormState extends State<SIForm> {
                   child: TextField(
                     keyboardType: TextInputType.number,
                     style: textStyle,
+                    controller: roiController,
                     decoration: InputDecoration(
                         labelText: "Rate of interest",
                         hintText: "Enter the rate of interest",
@@ -79,6 +84,7 @@ class _SIFormState extends State<SIForm> {
                       child: TextField(
                         keyboardType: TextInputType.number,
                         style: textStyle,
+                        controller: termController,
                         decoration: InputDecoration(
                             labelText: "Term",
                             hintText: "Enter the term",
@@ -117,9 +123,14 @@ class _SIFormState extends State<SIForm> {
                       child: RaisedButton(
                         textColor: Theme.of(context).accentColor,
                         color: Theme.of(context).primaryColorDark,
-                        child: Text("Calculate", textScaleFactor: 1.5,),
+                        child: Text(
+                          "Calculate",
+                          textScaleFactor: 1.5,
+                        ),
                         elevation: 6.0,
-                        onPressed: () {},
+                        onPressed: () {
+                          this._calculateTotalReturns();
+                        },
                       ),
                     ),
                   ),
@@ -130,17 +141,50 @@ class _SIFormState extends State<SIForm> {
                       child: RaisedButton(
                         textColor: Theme.of(context).primaryColor,
                         color: Theme.of(context).primaryColorLight,
-                        child: Text("Reset", textScaleFactor: 1.5,),
+                        child: Text(
+                          "Reset",
+                          textScaleFactor: 1.5,
+                        ),
                         elevation: 6.0,
-                        onPressed: () {},
+                        onPressed: () {
+                          this._reset();
+                        },
                       ),
                     ),
                   )
                 ],
+              ),
+              Container(
+                child: Padding(
+                  padding: EdgeInsets.all(_minimumPadding),
+                  child: Text(this._resultMessage),
+                ),
               )
             ],
           ),
         ));
+  }
+
+  void _calculateTotalReturns() {
+    double principal = double.parse(principalController.text);
+    double roi = double.parse(roiController.text);
+    double term = double.parse(termController.text);
+    double result = principal + (principal * roi * term);
+
+    this.setState(() {
+      _resultMessage =
+          "After $term years, your investment will be worth $result ${this._selectedCurrency}";
+    });
+  }
+
+  void _reset() {
+    principalController.text = "";
+    roiController.text = "";
+    termController.text = "";
+    this.setState(() {
+      this._selectedCurrency = "GBP";
+      this._resultMessage = "";
+    });
   }
 }
 
